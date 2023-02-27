@@ -31,39 +31,39 @@ async def get_product_goes(db_conn : Connection = Depends(get_database_file)):
     A list containing all distinct product names or False (bool) in case of error
     """
 
-    #authenticate S3 client for logging with your user credentials that are stored in your .env config file
-    clientLogs = boto3.client('logs',
-                        region_name='us-east-1',
-                        aws_access_key_id = os.environ.get('AWS_LOG_ACCESS_KEY'),
-                        aws_secret_access_key = os.environ.get('AWS_LOG_SECRET_KEY')
-                        )
+    # #authenticate S3 client for logging with your user credentials that are stored in your .env config file
+    # clientLogs = boto3.client('logs',
+    #                     region_name='us-east-1',
+    #                     aws_access_key_id = os.environ.get('AWS_LOG_ACCESS_KEY'),
+    #                     aws_secret_access_key = os.environ.get('AWS_LOG_SECRET_KEY')
+    #                     )
 
     query = "SELECT DISTINCT product FROM GOES_METADATA"   #sql query to execute
     df_product = pd.read_sql_query(query, db_conn)
     product = df_product['product'].tolist()    #convert the returned df to a list
     if (len(product)!=0):   #valid response
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "200: Success, product found"
-                }
-            ]
-        )
+        # clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+        #     logGroupName = "assignment-02",
+        #     logStreamName = "api",
+        #     logEvents = [
+        #         {
+        #         'timestamp' : int(time.time() * 1e3),
+        #         'message' : "200: Success, product found"
+        #         }
+        #     ]
+        # )
         return product
     else:
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "404: Please make sure you entered valid product"
-                }
-            ]
-        )
+        # clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+        #     logGroupName = "assignment-02",
+        #     logStreamName = "api",
+        #     logEvents = [
+        #         {
+        #         'timestamp' : int(time.time() * 1e3),
+        #         'message' : "404: Please make sure you entered valid product"
+        #         }
+        #     ]
+        # )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid product")
 
