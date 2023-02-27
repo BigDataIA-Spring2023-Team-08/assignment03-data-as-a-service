@@ -1,1 +1,1 @@
-# assignment03-data-as-a-service
+# assignment03: data-as-a-service
