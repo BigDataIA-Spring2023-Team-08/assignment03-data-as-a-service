@@ -43,28 +43,34 @@ async def get_product_goes(db_conn : Connection = Depends(get_database_file)):
     df_product = pd.read_sql_query(query, db_conn)
     product = df_product['product'].tolist()    #convert the returned df to a list
     if (len(product)!=0):   #valid response
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "200: Success, product found"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "200: Success, product found"
+                    }
+                ]
+            )
         return product
     else:
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "404: Please make sure you entered valid product"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #to allow testing CI via github actions, set the variable through github
+        else:   #else download the file stored by the airflow dag from the s3 bucket 
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "404: Please make sure you entered valid product"
+                    }
+                ]
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid product")
 
