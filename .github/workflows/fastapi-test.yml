@@ -11,6 +11,7 @@ jobs:
     env:
       AWS_LOG_ACCESS_KEY: ${{ secrets.AWS_LOG_ACCESS_KEY }}
       AWS_LOG_SECRET_KEY: ${{ secrets.AWS_LOG_ACCESS_KEY }}
+      CI_FLAG: ${{ secrets.CI_FLAG }}
     steps:
       - 
         name: Checkout
