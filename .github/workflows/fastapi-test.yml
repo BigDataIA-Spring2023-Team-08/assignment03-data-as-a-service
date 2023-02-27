@@ -23,7 +23,7 @@ jobs:
           source: s3://sevir-bucket-01/database-files/sql_scraped_database.db
           destination: ./fastapi-app/sql_scraped_database.db
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_KEY }}
+          aws_secret_access_key: ${{secrets.AWS_SECRET_KEY }}
           aws_region: us-east-1
       -
         name: Set up Python 3.10
