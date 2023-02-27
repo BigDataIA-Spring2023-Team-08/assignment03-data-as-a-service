@@ -9,14 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # AWS_ACCESS_KEY=AKIA5DCNGQCNDYHV4L4R
-      # AWS_SECRET_KEY=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
       AWS_LOG_ACCESS_KEY: ${{ secrets.AWS_LOG_ACCESS_KEY }}
       AWS_LOG_SECRET_KEY: ${{ secrets.AWS_LOG_ACCESS_KEY }}
-      # USER_BUCKET_NAME=sevir-bucket-01
-      # GOES18_BUCKET_NAME=noaa-goes18
-      # NEXRAD_BUCKET_NAME=noaa-nexrad-level2
-      # CI_FLAG=False
     steps:
       - 
         name: Checkout
