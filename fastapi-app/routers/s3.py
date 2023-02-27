@@ -53,16 +53,19 @@ async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product
     files = []  #list to store all file names within folder
     prefix = product+'/'+year+'/'+day+'/'+hour+'/'
     goes18_bucket = s3resource.Bucket(os.environ.get('GOES18_BUCKET_NAME'))
-    clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-        logGroupName = "assignment-02",
-        logStreamName = "api",
-        logEvents = [
-            {
-            'timestamp' : int(time.time() * 1e3),
-            'message' : "200: Printing files from GOES18 S3 bucket"
-            }
-        ]
-    )
+    if (os.environ.get('CI_FLAG')=='True'):
+        pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+    else:   #else enable adequate logging
+        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+            logGroupName = "assignment-02",
+            logStreamName = "api",
+            logEvents = [
+                {
+                'timestamp' : int(time.time() * 1e3),
+                'message' : "200: Printing files from GOES18 S3 bucket"
+                }
+            ]
+        )
     for objects in goes18_bucket.objects.filter(Prefix=prefix):
         file_path = objects.key
         file_path = file_path.split('/')
@@ -72,16 +75,19 @@ async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product
         return files
 
     else:
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "404: Unable to fetch filenames from S3 bucket"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "404: Unable to fetch filenames from S3 bucket"
+                    }
+                ]
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail= "Unable to fetch filenames from S3 bucket")
 
@@ -124,16 +130,19 @@ async def list_files_in_nexrad_bucket(year : str, month : str, day : str, ground
     files = []
     prefix = year+'/'+month+'/'+day+'/'+ground_station+'/'
     nexrad_bucket = s3resource.Bucket(os.environ.get('NEXRAD_BUCKET_NAME'))
-    clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-        logGroupName = "assignment-02",
-        logStreamName = "api",
-        logEvents = [
-            {
-            'timestamp' : int(time.time() * 1e3),
-            'message' : "200: Printing files from NEXRAD S3 bucket"
-            }
-        ]
-    )
+    if (os.environ.get('CI_FLAG')=='True'):
+        pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+    else:   #else enable adequate logging
+        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+            logGroupName = "assignment-02",
+            logStreamName = "api",
+            logEvents = [
+                {
+                'timestamp' : int(time.time() * 1e3),
+                'message' : "200: Printing files from NEXRAD S3 bucket"
+                }
+            ]
+        )
     for objects in nexrad_bucket.objects.filter(Prefix=prefix):
         file_path = objects.key
         file_path = file_path.split('/')
@@ -143,16 +152,19 @@ async def list_files_in_nexrad_bucket(year : str, month : str, day : str, ground
         return files
 
     else:
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "404: Unable to fetch filenames from S3 bucket"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "404: Unable to fetch filenames from S3 bucket"
+                    }
+                ]
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail= "Unable to fetch filenames from S3 bucket")
 
@@ -199,26 +211,29 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
     try:
         destination_bucket = s3resource.Bucket(os.environ.get('USER_BUCKET_NAME'))  #define the destination bucket as the user bucket
         all_selections_string = product+'/'+year+'/'+day+'/'+hour+'/'+file_name
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "Download requested for GOES file selections: " + all_selections_string + " & file name: " + file_name
-                }
-            ]
-        )
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "Attempting to copy selected GOES file " + file_name + " to local S3 bucket"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "Download requested for GOES file selections: " + all_selections_string + " & file name: " + file_name
+                    }
+                ]
+            )
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "Attempting to copy selected GOES file " + file_name + " to local S3 bucket"
+                    }
+                ]
+            )
 
         destination_folder = 'goes18/'
         destination_key = destination_folder + file_name
@@ -230,63 +245,72 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
         
         for file in destination_bucket.objects.all():
             if(file.key == destination_key):    #if selected file already exists at destination bucket
-                clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                    logGroupName = "assignment-02",
-                    logStreamName = "api",
-                    logEvents = [
-                        {
-                        'timestamp' : int(time.time() * 1e3),
-                        'message' : "File exists at destination bucket"
-                        }
-                    ]
-                )
-                clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                    logGroupName = "assignment-02",
-                    logStreamName = "api",
-                    logEvents = [
-                        {
-                        'timestamp' : int(time.time() * 1e3),
-                        'message' : "200: Displaying download link for already existing file "+ file_name + " with selections " + all_selections_string
-                        }
-                    ]
-                )
+                if (os.environ.get('CI_FLAG')=='True'):
+                    pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+                else:   #else enable adequate logging
+                    clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                        logGroupName = "assignment-02",
+                        logStreamName = "api",
+                        logEvents = [
+                            {
+                            'timestamp' : int(time.time() * 1e3),
+                            'message' : "File exists at destination bucket"
+                            }
+                        ]
+                    )
+                    clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                        logGroupName = "assignment-02",
+                        logStreamName = "api",
+                        logEvents = [
+                            {
+                            'timestamp' : int(time.time() * 1e3),
+                            'message' : "200: Displaying download link for already existing file "+ file_name + " with selections " + all_selections_string
+                            }
+                        ]
+                    )
                 return url_to_mys3
 
         destination_bucket.copy(copy_source, destination_key)   #copy file to destination bucket
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "200: File copied to S3 bucket successfully"
-                }
-            ]
-        )
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "200: Displaying download link for copied file "+ file_name + " with selections " + all_selections_string
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "200: File copied to S3 bucket successfully"
+                    }
+                ]
+            )
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "200: Displaying download link for copied file "+ file_name + " with selections " + all_selections_string
+                    }
+                ]
+            )
 
         return url_to_mys3
 
-    except: 
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "404: Unable to copy file"
-                }
-            ]
-        )
+    except:
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging 
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "404: Unable to copy file"
+                    }
+                ]
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail= "Unable to copy file")
 
@@ -332,26 +356,29 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
     try:
         destination_bucket = s3resource.Bucket(os.environ.get('USER_BUCKET_NAME'))  #define the destination bucket as the user bucket
         all_selections_string = year+'/'+month+'/'+day+'/'+ground_station+'/'+file_name
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "Download requested for NEXRAD file selections: " + all_selections_string + " & file name: " + file_name
-                }
-            ]
-        )
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "Attempting to copy selected NEXRAD file " + file_name + " to local S3 bucket"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "Download requested for NEXRAD file selections: " + all_selections_string + " & file name: " + file_name
+                    }
+                ]
+            )
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "Attempting to copy selected NEXRAD file " + file_name + " to local S3 bucket"
+                    }
+                ]
+            )
         destination_folder = 'nexrad/'
         destination_key = destination_folder + file_name
         url_to_mys3 = 'https://sevir-bucket-01.s3.amazonaws.com/' + destination_key
@@ -362,62 +389,71 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
         
         for file in destination_bucket.objects.all():
             if(file.key == destination_key):    #if selected file already exists at destination bucket
-                clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                    logGroupName = "assignment-02",
-                    logStreamName = "api",
-                    logEvents = [
-                        {
-                        'timestamp' : int(time.time() * 1e3),
-                        'message' : "File exists at destination bucket"
-                        }
-                    ]
-                )
-                clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                    logGroupName = "assignment-02",
-                    logStreamName = "api",
-                    logEvents = [
-                        {
-                        'timestamp' : int(time.time() * 1e3),
-                        'message' : "200: Displaying download link for already existing file "+ file_name + " with selections " + all_selections_string
-                        }
-                    ]
-                )
+                if (os.environ.get('CI_FLAG')=='True'):
+                    pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+                else:   #else enable adequate logging
+                    clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                        logGroupName = "assignment-02",
+                        logStreamName = "api",
+                        logEvents = [
+                            {
+                            'timestamp' : int(time.time() * 1e3),
+                            'message' : "File exists at destination bucket"
+                            }
+                        ]
+                    )
+                    clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                        logGroupName = "assignment-02",
+                        logStreamName = "api",
+                        logEvents = [
+                            {
+                            'timestamp' : int(time.time() * 1e3),
+                            'message' : "200: Displaying download link for already existing file "+ file_name + " with selections " + all_selections_string
+                            }
+                        ]
+                    )
                 return url_to_mys3
 
         destination_bucket.copy(copy_source, destination_key)   #copy file to destination bucket
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "File copied to S3 bucket successfully"
-                }
-            ]
-        )
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "200: Displaying download link for copied file "+ file_name + " with selections " + all_selections_string
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "File copied to S3 bucket successfully"
+                    }
+                ]
+            )
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "200: Displaying download link for copied file "+ file_name + " with selections " + all_selections_string
+                    }
+                ]
+            )
 
         return url_to_mys3
 
     except:
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                'timestamp' : int(time.time() * 1e3),
-                'message' : "404: Unable to copy file"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                    'timestamp' : int(time.time() * 1e3),
+                    'message' : "404: Unable to copy file"
+                    }
+                ]
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail= "Unable to copy file")

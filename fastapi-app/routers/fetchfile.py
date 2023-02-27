@@ -56,43 +56,52 @@ async def generate_goes_url(file_name : str, current_user: schema.User = Depends
         final_url = input_url+"-".join(sublist[0:3])+"/"+sublist_date[1:5]+"/"+sublist_date[5:8]+"/"+sublist_date[8:10]+"/"+file_name
         response = requests.get(final_url)
         if(response.status_code == 404):    #if format is correct but no such file exists
+            if (os.environ.get('CI_FLAG')=='True'):
+                pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+            else:   #else enable adequate logging
+                clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                    logGroupName = "assignment-02",
+                    logStreamName = "api",
+                    logEvents = [
+                        {
+                        'timestamp' : int(time.time() * 1e3),
+                        'message' : "404: No such file exists at GOES18 location"
+                        }
+                    ]
+                )
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail= "No such file exists at GOES18 location")
+
+        #else provide URL
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
                 logGroupName = "assignment-02",
                 logStreamName = "api",
                 logEvents = [
                     {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: No such file exists at GOES18 location"
+                        'timestamp' : int(time.time() * 1e3),
+                        'message' : "200: Successfully found URL for given file name for GOES18; \nFilename requested for download: " + file_name
                     }
                 ]
             )
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail= "No such file exists at GOES18 location")
-
-        #else provide URL
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Successfully found URL for given file name for GOES18; \nFilename requested for download: " + file_name
-                }
-            ]
-        )
         return final_url
 
     else:   #in case the filename format provided by user is wrong
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "400: Invalid filename format for GOES18"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                        'timestamp' : int(time.time() * 1e3),
+                        'message' : "400: Invalid filename format for GOES18"
+                    }
+                ]
+            )
         raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail= "Invalid filename format for GOES18")
 
@@ -130,42 +139,51 @@ async def generate_nexrad_url(file_name : str, current_user: schema.User = Depen
         final_url = input_url+file_name[4:8]+"/"+file_name[8:10]+"/"+file_name[10:12]+"/"+file_name[:4]+"/"+file_name
         response = requests.get(final_url)
         if(response.status_code == 404):    #if format is correct but no such file exists
+            if (os.environ.get('CI_FLAG')=='True'):
+                pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+            else:   #else enable adequate logging
+                clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                    logGroupName = "assignment-02",
+                    logStreamName = "api",
+                    logEvents = [
+                        {
+                        'timestamp' : int(time.time() * 1e3),
+                        'message' : "404: No such file exists at NEXRAD location"
+                        }
+                    ]
+                )
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail= "No such file exists at NEXRAD location")
+        
+        #else provide URL
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
                 logGroupName = "assignment-02",
                 logStreamName = "api",
                 logEvents = [
                     {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: No such file exists at NEXRAD location"
+                        'timestamp' : int(time.time() * 1e3),
+                        'message' : "200: Successfully found URL for given file name for NEXRAD \nFilename requested for download: " + file_name
                     }
                 ]
             )
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail= "No such file exists at NEXRAD location")
-        
-        #else provide URL
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Successfully found URL for given file name for NEXRAD \nFilename requested for download: " + file_name
-                }
-            ]
-        )
         return final_url
 
     else:   #in case the filename format provided by user is wrong
-        clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
-            logStreamName = "api",
-            logEvents = [
-                {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "400: Invalid filename format for NEXRAD"
-                }
-            ]
-        )
+        if (os.environ.get('CI_FLAG')=='True'):
+            pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
+        else:   #else enable adequate logging
+            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
+                logGroupName = "assignment-02",
+                logStreamName = "api",
+                logEvents = [
+                    {
+                        'timestamp' : int(time.time() * 1e3),
+                        'message' : "400: Invalid filename format for NEXRAD"
+                    }
+                ]
+            )
         raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail= "Invalid filename format for NEXRAD")
