@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 @router.get('/goes18', status_code=status.HTTP_200_OK)
-async def get_product_goes(db_conn : Connection = Depends(get_database_file)):
+async def get_product_goes(current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
     """Function to query distinct product names present in the SQLite database's GOES_METADATA (GOES-18 satellite data) 
     table. The function handles case when table does not exists.
     -----
@@ -75,7 +75,7 @@ async def get_product_goes(db_conn : Connection = Depends(get_database_file)):
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid product")
 
 @router.get('/goes18/prod', status_code=status.HTTP_200_OK)
-async def get_years_in_product_goes(product : str = 'ABI-L1b-RadC', db_conn : Connection = Depends(get_database_file)):
+async def get_years_in_product_goes(product : str = 'ABI-L1b-RadC', current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
     """Function to query distinct year values present in the SQLite database's GOES_METADATA (GOES-18 satellite data) table 
     for a given product.
     -----
@@ -130,7 +130,7 @@ async def get_years_in_product_goes(product : str = 'ABI-L1b-RadC', db_conn : Co
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid product")
 
 @router.get('/goes18/prod/year', status_code=status.HTTP_200_OK)
-async def get_days_in_year_goes(year : str, product : str = 'ABI-L1b-RadC', db_conn : Connection = Depends(get_database_file)):
+async def get_days_in_year_goes(year : str, product : str = 'ABI-L1b-RadC', current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
     """Function to query distinct day values present in the SQLite database's GOES_METADATA (GOES-18 satellite data) table 
     for a given year.
     -----
@@ -187,7 +187,7 @@ async def get_days_in_year_goes(year : str, product : str = 'ABI-L1b-RadC', db_c
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid value(s)")
 
 @router.get('/goes18/prod/year/day', status_code=status.HTTP_200_OK)
-async def get_hours_in_day_goes(day : str, year : str, product : str = 'ABI-L1b-RadC', db_conn : Connection = Depends(get_database_file)):
+async def get_hours_in_day_goes(day : str, year : str, product : str = 'ABI-L1b-RadC', current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
     """Function to query distinct hour values present in the SQLite database's GOES_METADATA (GOES-18 satellite data) table 
     for a given day value.
     -----
@@ -246,7 +246,7 @@ async def get_hours_in_day_goes(day : str, year : str, product : str = 'ABI-L1b-
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid value(s)")
 
 @router.get('/nexrad', status_code=status.HTTP_200_OK)
-async def get_years_nexrad(db_conn : Connection = Depends(get_database_file)):
+async def get_years_nexrad(current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
 
     """Function to query distinct years present in the SQLite database's NEXRAD_METADATA (NEXRAD satellite data) 
     table. The function handles case when table does not exists.
@@ -301,7 +301,7 @@ async def get_years_nexrad(db_conn : Connection = Depends(get_database_file)):
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid value(s)")
 
 @router.get('/nexrad/year', status_code=status.HTTP_200_OK)
-async def get_months_in_year_nexrad(year : str, db_conn : Connection = Depends(get_database_file)):
+async def get_months_in_year_nexrad(year : str, current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
 
     """Function to query distinct month values present in the SQLite database's NEXRAD_METADATA (NEXRAD satellite data) table 
     for a given year.
@@ -357,7 +357,7 @@ async def get_months_in_year_nexrad(year : str, db_conn : Connection = Depends(g
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid value(s)")
 
 @router.get('/nexrad/year/month', status_code=status.HTTP_200_OK)
-async def get_days_in_month_nexrad(month : str, year: str, db_conn : Connection = Depends(get_database_file)):
+async def get_days_in_month_nexrad(month : str, year: str, current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
      
     """Function to query distinct day values present in the SQLite database's NEXRAD_METADATA (NEXRAD satellite data) table 
     for a given month.
@@ -415,7 +415,7 @@ async def get_days_in_month_nexrad(month : str, year: str, db_conn : Connection 
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid value(s)")
 
 @router.get('/nexrad/year/month/day', status_code=status.HTTP_200_OK)
-async def get_stations_for_day_nexrad(day : str, month : str, year : str, db_conn : Connection = Depends(get_database_file)):
+async def get_stations_for_day_nexrad(day : str, month : str, year : str, current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
 
     """Function to query distinct day values present in the SQLite database's NEXRAD_METADATA (NEXRAD satellite data) table 
     for a given month.
@@ -475,7 +475,7 @@ async def get_stations_for_day_nexrad(day : str, month : str, year : str, db_con
             status_code=status.HTTP_404_NOT_FOUND, detail= "Please make sure you entered valid value(s)")
 
 @router.get('/mapdata', status_code=status.HTTP_200_OK)
-async def get_nextrad_mapdata(db_conn : Connection = Depends(get_database_file), current_user: schema.User = Depends(oauth2.get_current_user)):
+async def get_nextrad_mapdata(current_user: schema.User = Depends(oauth2.get_current_user), db_conn : Connection = Depends(get_database_file)):
 
     """Function to query all data from the SQLite database's MAPDATA_NEXRAD (NEXRAD satellite locations) 
     table. The function handles case when table does not exists.

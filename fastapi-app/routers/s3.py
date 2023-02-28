@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 @router.get('/goes18', status_code=status.HTTP_200_OK)
-async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product : str = "ABI-L1b-RadC"):
+async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product : str = "ABI-L1b-RadC", current_user: schema.User = Depends(oauth2.get_current_user)):
 
     """Function traverses through the specified GOES-18 S3 folder based on the inputs given. The file names are appended 
     to a list. Initially, the function sets up 2 boto3 clients (to connect to AWS): 1 for accessing s3 buckets
@@ -92,7 +92,7 @@ async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product
             status_code=status.HTTP_404_NOT_FOUND, detail= "Unable to fetch filenames from S3 bucket")
 
 @router.get('/nexrad', status_code=status.HTTP_200_OK)
-async def list_files_in_nexrad_bucket(year : str, month : str, day : str, ground_station : str):
+async def list_files_in_nexrad_bucket(year : str, month : str, day : str, ground_station : str, current_user: schema.User = Depends(oauth2.get_current_user)):
 
     """Function traverses through the specified NEXRAD S3 folder based on the inputs given. The file names are appended 
     to a list. Initially, the function sets up 2 boto3 clients (to connect to AWS): 1 for accessing s3 buckets
