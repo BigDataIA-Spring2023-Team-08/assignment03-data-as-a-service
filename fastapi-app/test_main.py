@@ -7,22 +7,22 @@ from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from main import app
 
-API_URL = "http://127.0.0.1:8080"
+#API_URL = "http://127.0.0.1:8080"
 
 test_name = "test"
 test_username = "testuser1"
 test_password = "userpass1"
 
+client = TestClient(app)
+
 #first generate token for test user
 payload = {'name': test_name, 'username': test_username, 'password': test_password}
-response = requests.request("POST", f"{API_URL}/user/create", json=payload)
-response2 = requests.request("POST", f"{API_URL}/login", data=payload)
+response = client.post("/user/create", json=payload)    #first sign up the test user
+response2 = client.post("/login", data=payload)     #next login to get the access token
 json_data = json.loads(response2.text)
 ACCESS_TOKEN = json_data["access_token"]    #capture test user's access token
 header = {}
 header['Authorization'] = f"Bearer {ACCESS_TOKEN}"
-
-client = TestClient(app)
 
 #unit test cases for every endpoint of the API
 
