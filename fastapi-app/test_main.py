@@ -1,39 +1,61 @@
 import requests
 import json
 import os
+import warnings
+warnings.filterwarnings('ignore')
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from main import app
+
+API_URL = "http://127.0.0.1:8080"
+
+test_name = "test"
+test_username = "testuser1"
+test_password = "userpass1"
+
+#first generate token for test user
+payload = {'name': test_name, 'username': test_username, 'password': test_password}
+response = requests.request("POST", f"{API_URL}/user/create", json=payload)
+response2 = requests.request("POST", f"{API_URL}/login", data=payload)
+json_data = json.loads(response2.text)
+ACCESS_TOKEN = json_data["access_token"]    #capture test user's access token
+header = {}
+header['Authorization'] = f"Bearer {ACCESS_TOKEN}"
 
 client = TestClient(app)
 
 #unit test cases for every endpoint of the API
 
+#Router: authenticate
+def test_incorrect_login():
+    payload={'username': 'nouser', 'password': 'incorrectpass'}
+    response = client.post("/login", data=payload)
+    assert response.status_code == 404
+
 #Router: database, Endpoint 1
 def test_get_product_goes():
-    response = client.get("/database/goes18")
-    #response = requests.request("GET", f"{API_URL}/database/goes18")
+    response = client.get("/database/goes18", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 1  #only 1 product considered for GOES18 should be returned
 
 #Router: database, Endpoint 2
 def test_get_years_in_product_goes():
-    response = client.get("/database/goes18/prod")
+    response = client.get("/database/goes18/prod", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 2  #only 2 years included in given default product
 
 #Router: database, Endpoint 2
 def test_get_years_in_product_goes_invalid():
-    response = client.get("/database/goes18/prod?product=xyz")
+    response = client.get("/database/goes18/prod?product=xyz", headers=header)
     assert response.status_code == 404
     json_resp = json.loads(response.text)
     assert list(json_resp.keys())==['detail']   #making sure the response has only 1 key which is "detail" (the detail of the HTTP exception occured)
 
 #Router: database, Endpoint 3
 def test_get_days_in_year_goes():
-    response = client.get(f"/database/goes18/prod/year?year=2022")
+    response = client.get(f"/database/goes18/prod/year?year=2022", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert json_resp[0] == '209' #first day listed in year 2022 is 209
@@ -41,49 +63,49 @@ def test_get_days_in_year_goes():
 
 #Router: database, Endpoint 4
 def test_get_hours_in_day_goes():
-    response = client.get("/database/goes18/prod/year/day?day=209&year=2022")
+    response = client.get("/database/goes18/prod/year/day?day=209&year=2022", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 24  #all 24 hour data available
 
 #Router: database, Endpoint 5
 def test_get_years_nexrad():
-    response = client.get("/database/nexrad")
+    response = client.get("/database/nexrad", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert json_resp == ['2022', '2023']  #only 2 years available in NEXRAD
 
 #Router: database, Endpoint 6
 def test_get_months_in_year_nexrad():
-    response = client.get("/database/nexrad/year?year=2022")
+    response = client.get("/database/nexrad/year?year=2022", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 12  #all 12 months data available in year 2022
 
 #Router: database, Endpoint 6
 def test_get_months_in_year_nexrad_invalid():
-    response = client.get("/database/nexrad/year?year=2021")
+    response = client.get("/database/nexrad/year?year=2021", headers=header)
     assert response.status_code == 404  #no data available years other than 2022 and 2023
     json_resp = json.loads(response.text)
     assert list(json_resp.keys())==['detail']   #making sure the response has only 1 key which is "detail" (the detail of the HTTP exception occured)
 
 #Router: database, Endpoint 7
 def test_get_days_in_month_nexrad():
-    response = client.get("/database/nexrad/year/month?month=01&year=2022")
+    response = client.get("/database/nexrad/year/month?month=01&year=2022", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 31  #for Jan 2022, 31 days' data available
 
 #Router: database, Endpoint 7
 def test_get_days_in_month_nexrad_invalid():
-    response = client.get("/database/nexrad/year/month?month=01&year=2021")
+    response = client.get("/database/nexrad/year/month?month=01&year=2021", headers=header)
     assert response.status_code == 404
     json_resp = json.loads(response.text)
     assert list(json_resp.keys())==['detail']   #making sure the response has only 1 key which is "detail" (the detail of the HTTP exception occured)
 
 #Router: database, Endpoint 8
 def test_get_stations_for_day_nexrad():
-    response = client.get("/database/nexrad/year/month/day?day=01&month=01&year=2022")
+    response = client.get("/database/nexrad/year/month/day?day=01&month=01&year=2022", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 202  #for 01 Jan 2022, 202 stations' data available
@@ -95,28 +117,28 @@ def test_get_nextrad_mapdata():
 
 #Router: s3, Endpoint 1
 def test_list_files_in_goes18_bucket():
-    response = client.get("/s3/goes18?year=2022&day=209&hour=00&product=ABI-L1b-RadC")
+    response = client.get("/s3/goes18?year=2022&day=209&hour=00&product=ABI-L1b-RadC", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 192  #192 files at given selection folder
 
 #Router: s3, Endpoint 1
 def test_list_files_in_goes18_bucket_invalid():
-    response = client.get("/s3/goes18?year=2022&day=209&hour=25&product=ABI-L1b-RadC")
+    response = client.get("/s3/goes18?year=2022&day=209&hour=25&product=ABI-L1b-RadC", headers=header)
     assert response.status_code == 404  #hour 25 does not exist
     json_resp = json.loads(response.text)
     assert list(json_resp.keys())==['detail']   #making sure the response has only 1 key which is "detail" (the detail of the HTTP exception occured)
 
 #Router: s3, Endpoint 2
 def test_list_files_in_nexrad_bucket():
-    response = client.get("/s3/nexrad?year=2022&month=01&day=01&ground_station=FOP1")
+    response = client.get("/s3/nexrad?year=2022&month=01&day=01&ground_station=FOP1", headers=header)
     assert response.status_code == 200
     json_resp = json.loads(response.text)
     assert len(json_resp) == 249  #249 files at given selection folder
 
 #Router: s3, Endpoint 2
 def test_list_files_in_nexrad_bucket_invalid():
-    response = client.get("/s3/nexrad?year=2022&month=00&day=01&ground_station=FOP1")
+    response = client.get("/s3/nexrad?year=2022&month=00&day=01&ground_station=FOP1", headers=header)
     assert response.status_code == 404 #month 00 does not exist
     json_resp = json.loads(response.text)
     assert list(json_resp.keys())==['detail']   #making sure the response has only 1 key which is "detail" (the detail of the HTTP exception occured)
