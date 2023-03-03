@@ -39,7 +39,7 @@ This work can help one:
 ## Architecture Diagram
 This architecture diagram depicts the flow of the application and the relationships between services. NOTE: Our proposed diagram is same our final implemented framework
 
-![Architecure Diagram](architectural_diagram_for_assignment_2.png)
+![Architecure Diagram](architectural_diagram_for_assignment_3.png)
 
 
 ## Project Components
