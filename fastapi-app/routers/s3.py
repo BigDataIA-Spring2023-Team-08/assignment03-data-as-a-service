@@ -57,12 +57,12 @@ async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product
         pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
     else:   #else enable adequate logging
         clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
+            logGroupName = "assignment-03",
             logStreamName = "api",
             logEvents = [
                 {
                 'timestamp' : int(time.time() * 1e3),
-                'message' : "200: Printing files from GOES18 S3 bucket"
+                'message' : "API endpoint: /s3/goes18\n Called by: " + current_user.username + " \n Response: 200 \nPrinting files from GOES18 S3 bucket"
                 }
             ]
         )
@@ -79,12 +79,12 @@ async def list_files_in_goes18_bucket(year : str, day : str, hour : str, product
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Unable to fetch filenames from S3 bucket"
+                    'message' : "API endpoint: /s3/goes18\n Called by: " + current_user.username + " \n Response: 404 \nUnable to fetch filenames from S3 bucket"
                     }
                 ]
             )
@@ -134,12 +134,12 @@ async def list_files_in_nexrad_bucket(year : str, month : str, day : str, ground
         pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
     else:   #else enable adequate logging
         clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-            logGroupName = "assignment-02",
+            logGroupName = "assignment-03",
             logStreamName = "api",
             logEvents = [
                 {
                 'timestamp' : int(time.time() * 1e3),
-                'message' : "200: Printing files from NEXRAD S3 bucket"
+                'message' : "API endpoint: /s3/nexrad\n Called by: " + current_user.username + " \n Response: 200 \nPrinting files from NEXRAD S3 bucket"
                 }
             ]
         )
@@ -156,12 +156,12 @@ async def list_files_in_nexrad_bucket(year : str, month : str, day : str, ground
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Unable to fetch filenames from S3 bucket"
+                    'message' : "API endpoint: /s3/nexrad\n Called by: " + current_user.username + " \n Response: 404 \nUnable to fetch filenames from S3 bucket"
                     }
                 ]
             )
@@ -215,22 +215,12 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
-                logStreamName = "api",
+                logGroupName = "assignment-03",
+                logStreamName = "ui",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
                     'message' : "Download requested for GOES file selections: " + all_selections_string + " & file name: " + file_name
-                    }
-                ]
-            )
-            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
-                logStreamName = "api",
-                logEvents = [
-                    {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "Attempting to copy selected GOES file " + file_name + " to local S3 bucket"
                     }
                 ]
             )
@@ -249,8 +239,8 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
                     pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
                 else:   #else enable adequate logging
                     clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                        logGroupName = "assignment-02",
-                        logStreamName = "api",
+                        logGroupName = "assignment-03",
+                        logStreamName = "ui",
                         logEvents = [
                             {
                             'timestamp' : int(time.time() * 1e3),
@@ -259,12 +249,12 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
                         ]
                     )
                     clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                        logGroupName = "assignment-02",
+                        logGroupName = "assignment-03",
                         logStreamName = "api",
                         logEvents = [
                             {
                             'timestamp' : int(time.time() * 1e3),
-                            'message' : "200: Displaying download link for already existing file "+ file_name + " with selections " + all_selections_string
+                            'message' : "API endpoint: /s3/goes18/copyfile\n Called by: " + current_user.username + " \n Response: 200 \nDisplaying download link for already existing file "+ file_name + " with selections " + all_selections_string
                             }
                         ]
                     )
@@ -275,22 +265,22 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
-                logStreamName = "api",
+                logGroupName = "assignment-03",
+                logStreamName = "ui",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: File copied to S3 bucket successfully"
+                    'message' : "File copied to S3 bucket successfully"
                     }
                 ]
             )
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Displaying download link for copied file "+ file_name + " with selections " + all_selections_string
+                    'message' : "API endpoint: /s3/goes18/copyfile\n Called by: " + current_user.username + " \n Response: 200 \nDisplaying download link for copied file "+ file_name + " with selections " + all_selections_string
                     }
                 ]
             )
@@ -302,12 +292,12 @@ async def copy_goes_file_to_user_bucket(file_name : str, product : str, year : s
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging 
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Unable to copy file"
+                    'message' : "API endpoint: /s3/goes18/copyfile\n Called by: " + current_user.username + " \n Response: 404 \nUnable to copy file"
                     }
                 ]
             )
@@ -360,8 +350,8 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
-                logStreamName = "api",
+                logGroupName = "assignment-03",
+                logStreamName = "ui",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
@@ -369,16 +359,7 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
                     }
                 ]
             )
-            clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
-                logStreamName = "api",
-                logEvents = [
-                    {
-                    'timestamp' : int(time.time() * 1e3),
-                    'message' : "Attempting to copy selected NEXRAD file " + file_name + " to local S3 bucket"
-                    }
-                ]
-            )
+ 
         destination_folder = 'nexrad/'
         destination_key = destination_folder + file_name
         url_to_mys3 = 'https://sevir-bucket-01.s3.amazonaws.com/' + destination_key
@@ -393,8 +374,8 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
                     pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
                 else:   #else enable adequate logging
                     clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                        logGroupName = "assignment-02",
-                        logStreamName = "api",
+                        logGroupName = "assignment-03",
+                        logStreamName = "ui",
                         logEvents = [
                             {
                             'timestamp' : int(time.time() * 1e3),
@@ -403,12 +384,12 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
                         ]
                     )
                     clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                        logGroupName = "assignment-02",
+                        logGroupName = "assignment-03",
                         logStreamName = "api",
                         logEvents = [
                             {
                             'timestamp' : int(time.time() * 1e3),
-                            'message' : "200: Displaying download link for already existing file "+ file_name + " with selections " + all_selections_string
+                            'message' : "API endpoint: /s3/nexrad/copyfile\n Called by: " + current_user.username + " \n Response: 200 \nDisplaying download link for already existing file "+ file_name + " with selections " + all_selections_string
                             }
                         ]
                     )
@@ -419,8 +400,8 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
-                logStreamName = "api",
+                logGroupName = "assignment-03",
+                logStreamName = "ui",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
@@ -429,12 +410,12 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
                 ]
             )
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Displaying download link for copied file "+ file_name + " with selections " + all_selections_string
+                    'message' : "API endpoint: /s3/nexrad/copyfile\n Called by: " + current_user.username + " \n Response: 200 \nDisplaying download link for copied file "+ file_name + " with selections " + all_selections_string
                     }
                 ]
             )
@@ -446,12 +427,12 @@ def copy_nexrad_file_to_user_bucket(file_name : str, year : str, month : str, da
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Unable to copy file"
+                    'message' : "API endpoint: /s3/nexrad/copyfile\n Called by: " + current_user.username + " \n Response: 404 \nUnable to copy file"
                     }
                 ]
             )

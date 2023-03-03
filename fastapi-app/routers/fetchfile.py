@@ -60,12 +60,12 @@ async def generate_goes_url(file_name : str, current_user: schema.User = Depends
                 pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
             else:   #else enable adequate logging
                 clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                    logGroupName = "assignment-02",
+                    logGroupName = "assignment-03",
                     logStreamName = "api",
                     logEvents = [
                         {
                         'timestamp' : int(time.time() * 1e3),
-                        'message' : "404: No such file exists at GOES18 location"
+                        'message' : "API endpoint: /fetchfile/goes18\n Called by: " + current_user.username + " \n Response: 404 \nNo such file exists at GOES18 location"
                         }
                     ]
                 )
@@ -77,12 +77,12 @@ async def generate_goes_url(file_name : str, current_user: schema.User = Depends
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                         'timestamp' : int(time.time() * 1e3),
-                        'message' : "200: Successfully found URL for given file name for GOES18; \nFilename requested for download: " + file_name
+                        'message' : "API endpoint: /fetchfile/goes18\n Called by: " + current_user.username + " \n Response: 200 \nSuccessfully found URL for given file name for GOES18; \nFilename requested for download: " + file_name
                     }
                 ]
             )
@@ -93,12 +93,12 @@ async def generate_goes_url(file_name : str, current_user: schema.User = Depends
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                         'timestamp' : int(time.time() * 1e3),
-                        'message' : "400: Invalid filename format for GOES18"
+                        'message' : "API endpoint: /fetchfile/goes18\n Called by: " + current_user.username + " \n Response: 400 \nInvalid filename format for GOES18"
                     }
                 ]
             )
@@ -143,12 +143,12 @@ async def generate_nexrad_url(file_name : str, current_user: schema.User = Depen
                 pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
             else:   #else enable adequate logging
                 clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                    logGroupName = "assignment-02",
+                    logGroupName = "assignment-03",
                     logStreamName = "api",
                     logEvents = [
                         {
                         'timestamp' : int(time.time() * 1e3),
-                        'message' : "404: No such file exists at NEXRAD location"
+                        'message' : "API endpoint: /fetchfile/nexrad\n Called by: " + current_user.username + " \n Response: 404 \nNo such file exists at NEXRAD location"
                         }
                     ]
                 )
@@ -160,12 +160,12 @@ async def generate_nexrad_url(file_name : str, current_user: schema.User = Depen
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                         'timestamp' : int(time.time() * 1e3),
-                        'message' : "200: Successfully found URL for given file name for NEXRAD \nFilename requested for download: " + file_name
+                        'message' : "API endpoint: /fetchfile/nexrad\n Called by: " + current_user.username + " \n Response: 200 \nSuccessfully found URL for given file name for NEXRAD \nFilename requested for download: " + file_name
                     }
                 ]
             )
@@ -176,12 +176,12 @@ async def generate_nexrad_url(file_name : str, current_user: schema.User = Depen
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                         'timestamp' : int(time.time() * 1e3),
-                        'message' : "400: Invalid filename format for NEXRAD"
+                        'message' : "API endpoint: /fetchfile/nexrad\n Called by: " + current_user.username + " \n Response: 400 \nInvalid filename format for NEXRAD"
                     }
                 ]
             )
