@@ -16,7 +16,8 @@ import plotly.express as px
 #load env variables
 load_dotenv()
 
-API_URL = "http://127.0.0.1:8080"
+#API_URL = "http://127.0.0.1:8080"
+API_URL = "http://34.73.90.193:8002"
 
 #authenticate S3 client for logging with your user credentials that are stored in your .env config file
 clientLogs = boto3.client('logs',
