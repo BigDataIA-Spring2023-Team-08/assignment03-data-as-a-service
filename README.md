@@ -3,7 +3,7 @@
 # Assignment 03: Data as a Service
 
 > ✅ Active status <br>
-> [🚀 Application link](http://34.73.90.193:8076/) <br>
+> [🚀 Application link](http://34.73.90.193:8076) <br>
 > [🧑🏻‍💻 FastAPI](http://34.73.90.193:8002/docs) <br>
 > [⏱ Airflow](http://34.73.90.193:9000) <br>
 > [🎬 Codelab Slides](https://codelabs-preview.appspot.com/?file_id=1JnHebupGexcMGBsASIkyiD3i3Ll14ISlHGPMQ6wKoWU#0) <br>
@@ -64,6 +64,14 @@ create JWTToken.py file, here we make use of a secret key, an algorithm of our c
 This function contains 2 functions:
   - Function to generate an access token
   - Function to verify the access token
+  
+### Create a docker image for this FastAPI app:
+
+```
+docker build -t daas_api_v2:latest .
+docker tag daas_api_v2:latest mashruwalav/daas_api_v2:latest
+docker push mashruwalav/daas_api_v2:latest
+```
 
 ## Streamlit
 The data exploration tool for the Geospatial startup uses the Python library [Streamlit](https://streamlit.iohttps://streamlit.io) for its user interface. The tool offers a user-friendly experience with three distinct pages, each dedicated to NexRad, GOES, and NexRad location maps. On each page, users can choose between downloading satellite data based on filename or specific field criteria. The UI then displays a download link to the S3 bucket, enabling users to successfully retrieve the desired satellite images.
@@ -90,6 +98,13 @@ The data exploration tool for the Geospatial startup uses the Python library [St
       - Comparison of Success (200 response code) and Failed request calls(ie non 200 response codes)
       - Each endpoint total number of calls
 
+### Create a docker image for this FastAPI app:
+
+```
+docker build -t daas_streamlit_v2:latest .
+docker tag daas_streamlit_v2:latest mashruwalav/daas_streamlit_v2:latest
+docker push mashruwalav/daas_streamlit_v2:latest
+```
 
 ## Unit Testing
 [PyTest](https://docs.pytest.org/en/7.1.x/contents.html) framework implemented to write tests which is easy to use but can be scaled to support functional testing for applications and libraries.
@@ -99,9 +114,12 @@ The data exploration tool for the Geospatial startup uses the Python library [St
 ## Steps to run application
 1. Download app files
 2. Have a ```.env``` file with necessary AWS credentials
+3. Execute the [docker compose file](docker-compose.yml) to have the FastAPI and Streamlit images running simultaneously by executing the following command: 
+```
+docker compose up
+```
 
-
-
+This runs the application with a frontend streaml interface on [http://34.73.90.193:8076](http://34.73.90.193:8076)
 -----
 > WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AND ABIDE BY THE POLICIES LISTED IN THE STUDENT HANDBOOK.
 > 
