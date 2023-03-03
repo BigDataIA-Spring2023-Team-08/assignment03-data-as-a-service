@@ -27,3 +27,7 @@ else:   #else download the file stored by the airflow dag from the s3 bucket
 async def get_database_file():
     database_connection = sqlite3.connect('sql_scraped_database.db')    #connect to metadata db
     return database_connection
+
+async def get_userdb_file():
+    user_connection = sqlite3.connect('user_data.db')    #connect to metadata db
+    return user_connection
