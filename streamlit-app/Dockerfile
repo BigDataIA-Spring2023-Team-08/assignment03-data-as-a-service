@@ -12,6 +12,6 @@ ADD . /app
 RUN pip install -r requirements.txt
 
 #### container env same as local at this point
-EXPOSE 8078
+EXPOSE 8076
 
-CMD ["streamlit", "run", "main.py", "--server.port", "8078"]
+CMD ["streamlit", "run", "main.py", "--server.port", "8076"]
