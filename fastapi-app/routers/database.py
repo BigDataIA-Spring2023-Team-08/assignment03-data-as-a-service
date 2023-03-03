@@ -5,7 +5,7 @@ from sqlite3 import Connection
 import schema, userdb, db_model, oauth2
 import os
 from dotenv import load_dotenv
-from get_database_file import get_database_file
+from get_database_file import get_database_file, get_userdb_file
 import boto3
 import time
 import pandas as pd
@@ -30,8 +30,8 @@ async def get_product_goes(current_user: schema.User = Depends(oauth2.get_curren
     Returns:
     A list containing all distinct product names or False (bool) in case of error
     """
-
     
+    #print(current_user.username)
     #authenticate S3 client for logging with your user credentials that are stored in your .env config file
     clientLogs = boto3.client('logs',
                         region_name='us-east-1',
@@ -47,12 +47,12 @@ async def get_product_goes(current_user: schema.User = Depends(oauth2.get_curren
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, product found"
+                    'message' : "API endpoint: /database/goes18\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, product found"
                     }
                 ]
             )
@@ -62,12 +62,12 @@ async def get_product_goes(current_user: schema.User = Depends(oauth2.get_curren
             pass    #to allow testing CI via github actions, set the variable through github
         else:   #else download the file stored by the airflow dag from the s3 bucket 
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/goes18\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -102,12 +102,12 @@ async def get_years_in_product_goes(product : str = 'ABI-L1b-RadC', current_user
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, years found"
+                    'message' : "API endpoint: /database/goes18/prod\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, years found"
                     }
                 ]
             )
@@ -117,12 +117,12 @@ async def get_years_in_product_goes(product : str = 'ABI-L1b-RadC', current_user
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/goes18/prod\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -159,12 +159,12 @@ async def get_days_in_year_goes(year : str, product : str = 'ABI-L1b-RadC', curr
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, days found"
+                    'message' : "API endpoint: /database/goes18/prod/year\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, days found"
                     }
                 ]
             )
@@ -174,12 +174,12 @@ async def get_days_in_year_goes(year : str, product : str = 'ABI-L1b-RadC', curr
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid value(s)"
+                    'message' : "API endpoint: /database/goes18/prod/year\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid value(s)"
                     }
                 ]
             )
@@ -218,12 +218,12 @@ async def get_hours_in_day_goes(day : str, year : str, product : str = 'ABI-L1b-
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, hours found"
+                    'message' : "API endpoint: /database/goes18/prod/year/day\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, hours found"
                     }
                 ]
             )
@@ -233,12 +233,12 @@ async def get_hours_in_day_goes(day : str, year : str, product : str = 'ABI-L1b-
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/goes18/prod/year/day\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -273,12 +273,12 @@ async def get_years_nexrad(current_user: schema.User = Depends(oauth2.get_curren
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, years found"
+                    'message' : "API endpoint: /database/nexrad\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, years found"
                     }
                 ]
             )
@@ -288,12 +288,12 @@ async def get_years_nexrad(current_user: schema.User = Depends(oauth2.get_curren
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/nexrad\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -329,12 +329,12 @@ async def get_months_in_year_nexrad(year : str, current_user: schema.User = Depe
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, months found"
+                    'message' : "API endpoint: /database/nexrad/year\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, months found"
                     }
                 ]
             )
@@ -344,12 +344,12 @@ async def get_months_in_year_nexrad(year : str, current_user: schema.User = Depe
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/nexrad/year\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -387,12 +387,12 @@ async def get_days_in_month_nexrad(month : str, year: str, current_user: schema.
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, days found"
+                    'message' : "API endpoint: /database/nexrad/year/month\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, days found"
                     }
                 ]
             )
@@ -402,12 +402,12 @@ async def get_days_in_month_nexrad(month : str, year: str, current_user: schema.
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/nexrad/year/month\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -447,12 +447,12 @@ async def get_stations_for_day_nexrad(day : str, month : str, year : str, curren
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, Stations found"
+                    'message' : "API endpoint: /database/nexrad/year/month/day\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, Stations found"
                     }
                 ]
             )
@@ -462,12 +462,12 @@ async def get_stations_for_day_nexrad(day : str, month : str, year : str, curren
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/nexrad/year/month/day\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
@@ -517,12 +517,12 @@ async def get_nextrad_mapdata(current_user: schema.User = Depends(oauth2.get_cur
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "200: Success, mapdata found"
+                    'message' : "API endpoint: /database/mapdata\n Called by: " + current_user.username + " \n Response: 200 \nSuccess, mapdata found"
                     }
                 ]
             )
@@ -532,12 +532,12 @@ async def get_nextrad_mapdata(current_user: schema.User = Depends(oauth2.get_cur
             pass    #no logs captured when tests ran thrpugh git actions as the reports can easily be found on github
         else:   #else enable adequate logging
             clientLogs.put_log_events(      #logging to AWS CloudWatch logs
-                logGroupName = "assignment-02",
+                logGroupName = "assignment-03",
                 logStreamName = "api",
                 logEvents = [
                     {
                     'timestamp' : int(time.time() * 1e3),
-                    'message' : "404: Please make sure you entered valid product"
+                    'message' : "API endpoint: /database/mapdata\n Called by: " + current_user.username + " \n Response: 404 \nPlease make sure you entered valid product"
                     }
                 ]
             )
