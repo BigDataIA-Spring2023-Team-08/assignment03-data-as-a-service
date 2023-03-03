@@ -12,11 +12,13 @@ from main import app
 test_name = "test"
 test_username = "testuser1"
 test_password = "userpass1"
+test_plan = "Free"
+test_user_type = "Test"
 
 client = TestClient(app)
 
 #first generate token for test user
-payload = {'name': test_name, 'username': test_username, 'password': test_password}
+payload = {'name': test_name, 'username': test_username, 'password': test_password, 'plan': test_plan, 'user_type': test_user_type}
 response = client.post("/user/create", json=payload)    #first sign up the test user
 response2 = client.post("/login", data=payload)     #next login to get the access token
 json_data = json.loads(response2.text)
