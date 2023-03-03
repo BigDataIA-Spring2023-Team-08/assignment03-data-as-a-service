@@ -2,10 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-f = open(os.path.join(dir_path, 'user_data.db'), 'w')
-f.close()
+#commenting these lines out because it creates and erases db contents everytime file is run
+#dir_path = os.path.dirname(os.path.realpath(__file__)) 
+#f = open(os.path.join(dir_path, 'user_data.db'), 'w')
+#f.close()
 
 
 user_db_url = 'sqlite:///./user_data.db'  #defining database url
