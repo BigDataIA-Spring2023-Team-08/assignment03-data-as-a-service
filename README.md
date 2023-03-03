@@ -46,7 +46,7 @@ This architecture diagram depicts the flow of the application and the relationsh
 - FastAPI: REST API endpoints for the application
 - Streamlit: Frontend interface for the Data as a Service application
 - Airflow: DAG to scrape & load metadata every midnight into a S3 bucket. Second DAG to perform data quality check of the metadata scraped using Great Expectations
-- Docker images: Both FastAPI and Streamlit images have been put on Docker Hub. These images have been pulled using the docker-compose.yml and the application is deployed through GCP live on URL specified above
+- Docker images: Both FastAPI and Streamlit images have been put on Docker Hub. These images have been pulled using the [docker-compose.yml](docker-compose.yml) and the application is deployed through GCP live on URL specified above
 
 
 ## Fast API
@@ -73,14 +73,14 @@ The data exploration tool for the Geospatial startup uses the Python library [St
       - Plotting a line chart of count of request by each user against time (date)
       - Metric for total API calls the previous day
       - Metric to show total average calls during the last week
-      - Comparison of Success ( 200 response code) and Failed request calls(ie non 200 response codes)
+      - Comparison of Success (200 response code) and Failed request calls(ie non 200 response codes)
       - Each endpoint total number of calls
 
 
 ## Unit Testing
 [PyTest](https://docs.pytest.org/en/7.1.x/contents.html) framework implemented to write tests which is easy to use but can be scaled to support functional testing for applications and libraries.
 * Create a new file [test_main.py](test_main.py), containing test functions
-* Implemented testing functions for all API endpoints. The tests have also been integrated to git actions and run on every commit. The workflow is present at [test_main.py](.github/workflows/fastapi-test.yml)
+* Implemented testing functions for all API endpoints. The tests have also been integrated to git actions and run on every commit. The workflow is present at [fastapi-test.yml](.github/workflows/fastapi-test.yml)
 
 ## Steps to run application
 1. Download app files
