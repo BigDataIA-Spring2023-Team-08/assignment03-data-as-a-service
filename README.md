@@ -3,11 +3,11 @@
 # Assignment 03: Data as a Service
 
 > ✅ Active status <br>
-> [🔗 Application link](http://34.73.90.193:8076/) <br>
-> [ FastAPI](http://34.73.90.193:8002/docs) <br>
-> [ Airflow](http://34.73.90.193:9000) <br>
+> [🚀 Application link](http://34.73.90.193:8076/) <br>
+> [🧑🏻‍💻 FastAPI](http://34.73.90.193:8002/docs) <br>
+> [⏱ Airflow](http://34.73.90.193:9000) <br>
 > [🎬 Codelab Slides](https://codelabs-preview.appspot.com/?file_id=1JnHebupGexcMGBsASIkyiD3i3Ll14ISlHGPMQ6wKoWU#0)
-
+> 🐳 Docker Hub Images: [FastAPI](https://hub.docker.com/repository/docker/mashruwalav/daas_api_v2/general), [Streamlit](https://hub.docker.com/repository/docker/mashruwalav/daas_streamlit_v2/general)
 
 ----- 
 
@@ -24,6 +24,8 @@
   - [Great Expectations ☑️](#great-expectations)
 
 
+## Objective
+Providing Data as a Service of a Data Exploration Tool for Satellite Imagery Data (NOAA's NexRad and GOES Satellite). Construct a decoupled application with microservices of FastAPI and Streamlit, both published as an image on Docker Hub. Use docker compose to host both services and run live for users to access. 
 
 
 ## Abstract
@@ -34,39 +36,20 @@ This work can help one:
 - Scrap the data from public AWS S3 buckets to store them into a personal S3 bucket making it convenient to then perform additional tasks or use these saved files from your personal bucket. Government’s public data can always be hard to navigate across but we make it easy with our application
 - Get files through the application by 2 options: searching by fields or directly entering a filename to get the URL from the source
 - View the map plot of all the NEXRAD satellite locations in the USA
-.
 
-The application site for the project hosted on streamlit cloud can be accessed [here](https://satellite-data-team-08.streamlit.app/).
 
 ## Architecture Diagram
-This architecture diagram depicts the flow of the application and the relationships between services.
+This architecture diagram depicts the flow of the application and the relationships between services. NOTE: Our proposed diagram is same our final implemented framework
+
 ![Architecure Diagram](architectural_diagram_for_assignment_2.png)
 
-## Data Sources
-The National Oceanic and Atmospheric Administration (NOAA) is a government agency responsible for monitoring the weather and climate of the United States. It operates two types of satellites, the [Geostationary Operational Environmental Satellite (GOES)](https://www.goes.noaa.gov) and the [Next Generation Weather Radar (NexRad)](https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar) , which collect data on various meteorological phenomena. This data is then made publicly available through the NOAA website, allowing data analysts to easily access it. We have aimed to build a data exploration tool that leverages these publicly available data sources to simplify the process of downloading and analyzing the data.
 
-## Scraping Data and Copying to AWS S3 bucket
-Data scraping for the data sources is done from the publicly accessible AWS S3 bucket for eac - [GOES (provided by NOAA)](https://registry.opendata.aws/noaa-goes/) & [NEXRAD data registry](https://registry.opendata.aws/noaa-nexrad/). For the purpose of our application, we restrict our data to [GOES-18 data](https://noaa-goes18.s3.amazonaws.com/index.html) and [NEXRAD level 2](https://noaa-nexrad-level2.s3.amazonaws.com/index.html) buckets respectively. Within this, the data for our prototype application is further restricted (mentioned below). The third data source needed for this application is the latitude, longitudes and state information for all NEXRAD satellites in the US. This scraping is done from a [.txt file](https://www.ncei.noaa.gov/access/homr/file/nexrad-stations.txt) found on NOAA’s data registry. The final sources where data is scraped from: 
+## Project components
+- FastAPI: REST API endpoints for the application
+- Streamlit: Frontend interface for the Data as a Service application
+- Airflow: DAG to scrape & load metadata every midnight into a S3 bucket. Second DAG to perform data quality check of the metadata scraped using Great Expectations
+- Docker images: Both FastAPI and Streamlit images have been put on Docker Hub. These images have been pulled using the docker-compose.yml and the application is deployed through GCP live on URL specified above
 
-- Product `ABI-L1b-RadC/` within GOES-18
-- Years `2022` and `2023` for NEXRAD
-- NEXRAD satellite’s geographical locations
-
-### Set up AWS account & credential variables:
-Scraping of data from these sources is done using the `boto3` python library which allows you to connect to AWS resources using your credentials. After creating a free AWS account, one needs to store their `AWS_ACCESS_KEY` & `AWS_SECRET_KEY` in their local `.env` configuration file in order to access these keys while executing the code.
-
-### Executing code to scrape all data:
-Only the `scraper_main.py` script needs to be executed to perform scraping & storing scraped data into the SQLite database. This script calls the 3 data scraper function for the 3 data sources defined above: `scraper_goes18.py, scraper_nexrad.py, scraper_mapdata.py`.
-The two scripts scripts `scraper_goes18.py` & `scraper_nexrad.py` access the relevant S3 bucket and return the data as a dataframe. Similarly, the `scraper_mapdata.py` function returns the data scraped from the txt file. 
-
-At the end, the `scraper_main.py` script calls the `store_scraped_data_to_db` function to store this scraped metadata in the relevant tables within our SQLite database.
-
-## SQLite DB
-After the metadata is scraped and stored as dataframes each corresponding to GOES18, NexRad and NexRad location maps, we first check if the database exists and initialize it if there is no database. This creates a `.db` file. Once a connection to the database is established, SQL queries are made to create tables to store the scraped data (GOES, NexRad and  NexRad location maps) in the [SQLite](https://www.sqlite.org/index.html) database. These create tables statements can be found in `sql_script_goes18.sql, sql_script_nexrad.sql, sql_script_mapdata.sql` files. The tables are named `GOES_METADATA, NEXRAD_METADATA and MAPDATA_NEXRAD`. 
-
-After populating these, the SQLite database is further used throughout our application to query field values when the user is on the search by fields page on the streamlit UI. In order to enable the users to dynamically get relevant fields selection box options in search by field criteria on UI, they should be presented with the values based on their selection. This is done in the backend through SQL queries to the database to fetch data depending on the user’s selections dynamically. These queries can be found in the `query_metadata_database.py` script. 
-
-The NexRad map plot page on the streamlit UI queries all data from the `MAPDATA_NEXRAD` table in the SQLite database. The query pertaining to this is also present in the `query_metadata_database.py` script.
 
 ## Fast API
 
@@ -88,25 +71,17 @@ The data exploration tool for the Geospatial startup uses the Python library [St
       - Download file by entering field values
       - Get public URL by entering filename
   - NEXRAD Maps Location page
-
-### Flow for Download file by entering field values
-1. Enter text box fields for each value (for example, in GOES18 it is year, day & hour)
-2. Once these initial selections are made, dynamically list the files available at the folder with the selections given 
-3. Choose a file from the list to download it via a URL
-
-### Flow for Get public URL by entering filename
-1. Enter a filename (along with the file extension, if any) and hit enter
-2. If found, the URL from the public bucket is shown, else a relevant error/warning is given 
-
-### Flow for NEXRAD Maps Location page
-1. Displays a map of all satellite locations with hover text for all points
+  - Analytics Dashboard
+      - Plotting a line chart of count of request by each user against time (date)
+      - Metric for total API calls the previous day
+      - Metric to show total average calls during the last week
+      - Comparison of Success ( 200 response code) and Failed request calls(ie non 200 response codes)
+      - Each endpoint total number of calls
 
 ### Steps to run application:
-1. Install Streamlit package
+1. Download app files
+2. Have a ```.env``` file with necessary AWS credentials
 
-```
-pip install streamlit
-```
 
 2. Create a new file [streamlit_app.py](streamlit_app.py) to build a UI for the app. Code snippet for main function, depicting 3 different pages for GOES, NEXRAD and NEXRAD locations Map:
 ```
