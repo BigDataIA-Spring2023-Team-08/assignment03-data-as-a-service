@@ -12,16 +12,14 @@
 ----- 
 
 ## Index
+  - [Objective](#objective)
   - [Abstract 📝](#abstract)
   - [Architecture Diagram](#architecture-diagram)
-  - [Data Sources 💽](#data-sources)
-  - [Scraping Data and Copying to AWS S3 bucket🧊](#scraping-data-and-copying-to-aws-s3-bucket)
-  - [SQLite DB 🛢](#sqlite-db)
-  - [Fast API ⚡️](#fast-api)  
-  - [Streamlit UI 🖥️](#streamlit)
-  - [Storing logs to AWS CloudWatch 💾](#storing-logs-to-aws-cloudwatch)
+  - [Project Components 💽](#project-components)
+  - [FastAPI](#fast-api)
+  - [Streamlit](#streamlit) 
   - [Unit Testing ⚒️](#unit-testing)
-  - [Great Expectations ☑️](#great-expectations)
+  - [Steps to run application](#steps-to-run-application)
 
 
 ## Objective
@@ -44,7 +42,7 @@ This architecture diagram depicts the flow of the application and the relationsh
 ![Architecure Diagram](architectural_diagram_for_assignment_2.png)
 
 
-## Project components
+## Project Components
 - FastAPI: REST API endpoints for the application
 - Streamlit: Frontend interface for the Data as a Service application
 - Airflow: DAG to scrape & load metadata every midnight into a S3 bucket. Second DAG to perform data quality check of the metadata scraped using Great Expectations
@@ -78,16 +76,16 @@ The data exploration tool for the Geospatial startup uses the Python library [St
       - Comparison of Success ( 200 response code) and Failed request calls(ie non 200 response codes)
       - Each endpoint total number of calls
 
-### Steps to run application:
-1. Download app files
-2. Have a ```.env``` file with necessary AWS credentials
-
 
 ## Unit Testing
 [PyTest](https://docs.pytest.org/en/7.1.x/contents.html) framework implemented to write tests which is easy to use but can be scaled to support functional testing for applications and libraries.
-
 * Create a new file [test_main.py](test_main.py), containing test functions
-* Implemented testing functions for all API endpoints. The tests have also been integrated 
+* Implemented testing functions for all API endpoints. The tests have also been integrated to git actions and run on every commit. The workflow is present at [test_main.py](github/workflows)
+
+## Steps to run application
+1. Download app files
+2. Have a ```.env``` file with necessary AWS credentials
+
 
 
 -----
