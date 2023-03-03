@@ -129,3 +129,11 @@ dmypy.json
 .pyre/
 
 fastapi-app/env_fast
+
+#Great Expectations - Airflow
+airflow_GreatExpectations/airflow/ge
+airflow_GreatExpectations/airflow/working_dir/great_expectations/expectations/.ge_store_backend_id
+airflow_GreatExpectations/airflow/working_dir/great_expectations/checkpoints
+airflow_GreatExpectations/airflow/working_dir/great_expectations/plugins
+airflow_GreatExpectations/airflow/working_dir/great_expectations/uncommitted/config_variables.yml
+airflow_GreatExpectations/airflow/working_dir/great_expectations/uncommitted/validations
