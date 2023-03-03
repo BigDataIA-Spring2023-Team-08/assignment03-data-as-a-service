@@ -82,6 +82,7 @@ The data exploration tool for the Geospatial startup uses the Python library [St
       - Download file by entering field values
       - Get public URL by entering filename
   - NEXRAD Maps Location page
+  - Pop up to suggest a plan upgrade when the users exceed their alloted number of API request limits
   - Analytics Dashboard
       - Plotting a line chart of count of request by each user against time (date)
       - Metric for total API calls the previous day
