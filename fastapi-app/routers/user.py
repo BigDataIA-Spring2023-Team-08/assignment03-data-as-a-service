@@ -6,7 +6,7 @@ from sqlite3 import Connection
 import schema, userdb, db_model, oauth2
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-from get_database_file import get_database_file, get_userdb_file
+from get_database_file import get_database_file
 from hashing import Hash
 
 router = APIRouter(
