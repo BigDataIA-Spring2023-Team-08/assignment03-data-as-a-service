@@ -79,14 +79,13 @@ The data exploration tool for the Geospatial startup uses the Python library [St
 
 ## Unit Testing
 [PyTest](https://docs.pytest.org/en/7.1.x/contents.html) framework implemented to write tests which is easy to use but can be scaled to support functional testing for applications and libraries.
-
+* Create a new file [test_main.py](test_main.py), containing test functions
+* Implemented testing functions for all API endpoints. The tests have also been integrated to git actions and run on every commit. The workflow is present at [test_main.py](github/workflows)
 
 ## Steps to run application
 1. Download app files
 2. Have a ```.env``` file with necessary AWS credentials
 
-* Create a new file [test_main.py](test_main.py), containing test functions
-* Implemented testing functions for all API endpoints. The tests have also been integrated 
 
 
 -----
