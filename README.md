@@ -52,17 +52,18 @@ This architecture diagram depicts the flow of the application and the relationsh
 ## Fast API
 To truly ensure decoupling, API calls are made in the backend to the Streamlit app in order to achieve the following:
 
-Create and Get users
-Query the DB to populate the Search fields in Streamlit
-Create and verify Login and Access Tokens,
-Allow download of files
+- Create and Get users : Users are created with their name, username, password(stored as a hash) and Plan
+- Plan: The users are offered 3 plans: Free, Gold and Platinum with varying levels of API request limits.
+- Query the DB to populate the Search fields in Streamlit
+- Create and verify Login and Access Tokens,
+- Allow download of files
 
 The users in the database are granted an access token for a limited time, also known as a session. This access token acts as an authentication to facilitate authorization.
 
 create JWTToken.py file, here we make use of a secret key, an algorithm of our choice(HS256) and an expiration time(30 mins)
 This function contains 2 functions:
-  Function to generate an access token
-  Function to verify the access token
+  - Function to generate an access token
+  - Function to verify the access token
 
 ## Streamlit
 The data exploration tool for the Geospatial startup uses the Python library [Streamlit](https://streamlit.iohttps://streamlit.io) for its user interface. The tool offers a user-friendly experience with three distinct pages, each dedicated to NexRad, GOES, and NexRad location maps. On each page, users can choose between downloading satellite data based on filename or specific field criteria. The UI then displays a download link to the S3 bucket, enabling users to successfully retrieve the desired satellite images.
