@@ -6,7 +6,7 @@
 > [🚀 Application link](http://34.73.90.193:8076) <br>
 > [🧑🏻‍💻 FastAPI](http://34.73.90.193:8002/docs) <br>
 > [⏱ Airflow](http://34.73.90.193:9000) <br>
-> [🎬 Codelab Slides](https://codelabs-preview.appspot.com/?file_id=1JnHebupGexcMGBsASIkyiD3i3Ll14ISlHGPMQ6wKoWU#0) <br>
+> [🎬 Codelab Slides](https://codelabs-preview.appspot.com/?file_id=1fUM2sqb3gwQnp8IVwKcPGf0Ss6CL-etq_i4HioGG4k4#12) <br>
 > 🐳 Docker Hub Images: [FastAPI](https://hub.docker.com/repository/docker/mashruwalav/daas_api_v2/general), [Streamlit](https://hub.docker.com/repository/docker/mashruwalav/daas_streamlit_v2/general)
 
 ----- 
