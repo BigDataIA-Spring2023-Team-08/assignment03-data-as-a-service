@@ -7,7 +7,7 @@
 > [🧑🏻‍💻 FastAPI](http://34.73.90.193:8002/docs) <br>
 > [⏱ Airflow](http://34.73.90.193:9000) <br>
 > [🎬 Codelab Slides](https://codelabs-preview.appspot.com/?file_id=1fUM2sqb3gwQnp8IVwKcPGf0Ss6CL-etq_i4HioGG4k4#12) <br>
-> 🐳 Docker Hub Images: [FastAPI](https://hub.docker.com/repository/docker/mashruwalav/daas_api_v2/general), [Streamlit](https://hub.docker.com/repository/docker/mashruwalav/daas_streamlit_v2/general)
+> 🐳 Docker Hub Images: [FastAPI](https://hub.docker.com/repository/docker/mashruwalav/daas_api_v2/general), [Streamlit](https://hub.docker.com/repository/docker/mashruwalav/daas_streamlit_v2/general) <br>
 > [📦 Python Package] (https://pypi.org/project/daas-satellite-data-team8/0.0.1/) <br>
 
 ----- 
