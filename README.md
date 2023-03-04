@@ -34,7 +34,7 @@ This work can help one:
 - Scrap the data from public AWS S3 buckets to store them into a personal S3 bucket making it convenient to then perform additional tasks or use these saved files from your personal bucket. Government’s public data can always be hard to navigate across but we make it easy with our application
 - Get files through the application by 2 options: searching by fields or directly entering a filename to get the URL from the source
 - View the map plot of all the NEXRAD satellite locations in the USA
-
+- Access the application through CLI which is available in the form of a python package
 
 ## Architecture Diagram
 This architecture diagram depicts the flow of the application and the relationships between services. NOTE: Our proposed diagram is same our final implemented framework
